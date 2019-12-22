@@ -8,4 +8,7 @@
     <dimen name="sclock_big_clock_font_size">56sp</dimen>
     <dimen name="sclock_date_font_size">7dp</dimen>
     <dimen name="sclock_icon_size">18dp</dimen>
+
+    <!-- Padding added to keyguard status area when Type clock is in use -->
+    <dimen name="keyguard_status_area_typeclock_padding">32dp</dimen>
 </resources>

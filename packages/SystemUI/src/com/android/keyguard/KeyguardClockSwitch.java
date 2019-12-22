@@ -20,6 +20,7 @@ import android.util.Log;
 import android.util.MathUtils;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -33,6 +34,7 @@ import com.android.internal.colorextraction.ColorExtractor;
 import com.android.internal.colorextraction.ColorExtractor.OnColorsChangedListener;
 import com.android.keyguard.clock.ClockManager;
 import com.android.systemui.Dependency;
+import com.android.keyguard.KeyguardSliceView;
 import com.android.systemui.Interpolators;
 import com.android.systemui.OnSwipeTouchListener;
 import com.android.systemui.R;
@@ -259,6 +261,7 @@ public class KeyguardClockSwitch extends RelativeLayout {
             mClockPlugin.onDestroyView();
             mClockPlugin = null;
         }
+        adjustStatusAreaPadding(plugin);
         if (plugin == null) {
             if (mShowingHeader) {
                 mClockView.setVisibility(View.GONE);
@@ -471,6 +474,14 @@ public class KeyguardClockSwitch extends RelativeLayout {
                 mBigClockContainer.setVisibility(VISIBLE);
             }
         }
+    }
+
+    private void adjustStatusAreaPadding(ClockPlugin plugin) {
+        final boolean mIsTypeClock = plugin != null && plugin.getName().equals("type");
+        mKeyguardStatusArea.setRowGravity(mIsTypeClock ? Gravity.LEFT : Gravity.CENTER);
+        mKeyguardStatusArea.setRowPadding(mIsTypeClock ? mContext.getResources()
+                .getDimensionPixelSize(R.dimen.keyguard_status_area_typeclock_padding) : 0, 0, 0,
+                0);
     }
 
     /**
