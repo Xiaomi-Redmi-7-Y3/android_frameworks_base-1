@@ -24,4 +24,6 @@
     <string-array name="face_acquired_vendor"/>
     <string-array name="face_error_vendor"/>
     <string name="clock_title_android_s_dp3" translatable="false">Android S DP3</string>
+        <!-- android s clock -->
+    <string name="clock_title_android_s" translatable="false">Android S</string>
 </resources>
