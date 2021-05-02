@@ -18,8 +18,10 @@
 */
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<<<<<<< HEAD:core/res/res/values-br-rFR/strings.xml
     <string-array name="fingerprint_acquired_vendor"/>
     <string-array name="fingerprint_error_vendor"/>
     <string-array name="face_acquired_vendor"/>
     <string-array name="face_error_vendor"/>
+    <string name="clock_title_android_s_dp3" translatable="false">Android S DP3</string>
 </resources>
