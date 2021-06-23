@@ -18,11 +18,13 @@ import android.transition.TransitionValues;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.MathUtils;
+import android.view.GestureDetector;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextClock;
+import android.widget.TextView;
 
 import androidx.annotation.VisibleForTesting;
 
@@ -30,6 +32,7 @@ import com.android.internal.colorextraction.ColorExtractor;
 import com.android.internal.colorextraction.ColorExtractor.OnColorsChangedListener;
 import com.android.keyguard.clock.ClockManager;
 import com.android.systemui.Interpolators;
+import com.android.systemui.OnSwipeTouchListener;
 import com.android.systemui.R;
 import com.android.systemui.colorextraction.SysuiColorExtractor;
 import com.android.systemui.plugins.ClockPlugin;
@@ -50,6 +53,7 @@ import javax.inject.Named;
  */
 public class KeyguardClockSwitch extends RelativeLayout {
 
+    private static final boolean DEBUG = false;
     private static final String TAG = "KeyguardClockSwitch";
 
     /**
@@ -91,6 +95,11 @@ public class KeyguardClockSwitch extends RelativeLayout {
     private TextClock mClockView;
 
     /**
+     * Change clock face textview
+     */
+    private TextView mChangeClockface;
+
+    /**
      * Default clock, bold version.
      * Used to transition to bold when shrinking the default clock.
      */
@@ -100,6 +109,11 @@ public class KeyguardClockSwitch extends RelativeLayout {
      * Frame for default and custom clock.
      */
     private FrameLayout mSmallClockFrame;
+
+    /**
+     * Whole clock relative layout
+     */
+    private RelativeLayout mWholeClockContainer;
 
     /**
      * Container for big custom clock.
@@ -133,6 +147,16 @@ public class KeyguardClockSwitch extends RelativeLayout {
      * Track the state of the status bar to know when to hide the big_clock_container.
      */
     private int mStatusBarState;
+
+    /**
+     * Gesture detection
+     */
+    private GestureDetector mGestureDetector;
+
+    /**
+     * Animation status
+     */
+    private boolean mAnimationStatus;
 
     private final StatusBarStateController.StateListener mStateListener =
             new StatusBarStateController.StateListener() {
@@ -190,15 +214,19 @@ public class KeyguardClockSwitch extends RelativeLayout {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
+        mChangeClockface = findViewById(R.id.change_clock_face);
         mClockView = findViewById(R.id.default_clock_view);
         mClockViewBold = findViewById(R.id.default_clock_view_bold);
         mSmallClockFrame = findViewById(R.id.clock_view);
         mKeyguardStatusArea = findViewById(R.id.keyguard_status_area);
+        mWholeClockContainer = findViewById(R.id.whole_clock_container);
     }
 
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
+        Dependency.get(KeyguardUpdateMonitor.class).registerCallback(mInfoCallback);
+        setupFrameListener();
         mClockManager.addOnClockChangedListener(mClockChangedListener);
         mStatusBarStateController.addCallback(mStateListener);
         mSysuiColorExtractor.addOnColorsChangedListener(mColorsListener);
@@ -208,6 +236,7 @@ public class KeyguardClockSwitch extends RelativeLayout {
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
+        Dependency.get(KeyguardUpdateMonitor.class).removeCallback(mInfoCallback);
         mClockManager.removeOnClockChangedListener(mClockChangedListener);
         mStatusBarStateController.removeCallback(mStateListener);
         mSysuiColorExtractor.removeOnColorsChangedListener(mColorsListener);
@@ -652,5 +681,82 @@ public class KeyguardClockSwitch extends RelativeLayout {
             });
             return animator;
         }
+    }
+
+    private KeyguardUpdateMonitorCallback mInfoCallback = new KeyguardUpdateMonitorCallback() {
+
+        @Override
+        public void onTimeChanged() {
+        }
+
+        @Override
+        public void onTimeZoneChanged(TimeZone timeZone) {
+        }
+
+        @Override
+        public void onKeyguardVisibilityChanged(boolean showing) {
+            if (DEBUG) Log.d(TAG, "clock switch event called");
+            if (!showing) {
+                if (DEBUG) Log.d(TAG, "keyguard not showing");
+                if (mAnimationStatus) {
+                    SeamlessClockSwitch.blinkInfo(mChangeClockface, false, getCurrentTextColor(), mContext);
+                    SeamlessClockSwitch.shakeClock(mSmallClockFrame, false);
+                    mAnimationStatus = !mAnimationStatus;
+                }
+            }
+        }
+
+        @Override
+        public void onStartedWakingUp() {
+            if (mAnimationStatus) {
+                SeamlessClockSwitch.blinkInfo(mChangeClockface, false, getCurrentTextColor(), mContext);
+                SeamlessClockSwitch.shakeClock(mSmallClockFrame, false);
+                mAnimationStatus = !mAnimationStatus;
+            }
+        }
+
+        @Override
+        public void onFinishedGoingToSleep(int why) {
+            if (mAnimationStatus) {
+                SeamlessClockSwitch.blinkInfo(mChangeClockface, false, getCurrentTextColor(), mContext);
+                SeamlessClockSwitch.shakeClock(mSmallClockFrame, false);
+                mAnimationStatus = !mAnimationStatus;
+            }
+        }
+
+        @Override
+        public void onUserSwitchComplete(int userId) {
+        }
+
+        @Override
+        public void onLogoutEnabledChanged() {
+        }
+    };
+
+    private void setupFrameListener() {
+        mWholeClockContainer.setOnTouchListener(new OnSwipeTouchListener(mContext) {
+            public void onSwipeTop() {
+            }
+            public void onSwipeRight() {
+                if (mAnimationStatus) SeamlessClockSwitch.changeClockFace(mContext,2);
+            }
+            public void onSwipeLeft() {
+                if (mAnimationStatus) SeamlessClockSwitch.changeClockFace(mContext,1);
+            }
+            public void onSwipeBottom() {
+            }
+            public void onLongClick() {
+                //if (DescendantSystemUIUtils.settingStatusBoolean("lockscreen_clock_face_change", mContext)) {
+                    if (mAnimationStatus) {
+                        SeamlessClockSwitch.blinkInfo(mChangeClockface, false, getCurrentTextColor(), mContext);
+                        SeamlessClockSwitch.shakeClock(mSmallClockFrame, false);
+                    } else {
+                        SeamlessClockSwitch.blinkInfo(mChangeClockface, true, getCurrentTextColor(), mContext);
+                        SeamlessClockSwitch.shakeClock(mSmallClockFrame, true);
+                    }
+                    mAnimationStatus = !mAnimationStatus;
+                //}
+            }
+        });
     }
 }
