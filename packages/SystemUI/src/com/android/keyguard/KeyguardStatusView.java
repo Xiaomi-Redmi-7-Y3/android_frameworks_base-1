@@ -34,6 +34,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.core.graphics.ColorUtils;
@@ -69,6 +70,9 @@ public class KeyguardStatusView extends GridLayout implements
     private boolean mPulsing;
     private float mDarkAmount = 0;
     private int mTextColor;
+
+    private static final String LOCKSCREEN_CUSTOM_CLOCK_FACE =
+            "secure:" + Settings.Secure.LOCK_SCREEN_CUSTOM_CLOCK_FACE;
 
     /**
      * Bottom margin that defines the margin between bottom of smart space and top of notification
@@ -136,6 +140,8 @@ public class KeyguardStatusView extends GridLayout implements
         mIActivityManager = ActivityManager.getService();
         mLockPatternUtils = new LockPatternUtils(getContext());
         mHandler = new Handler();
+        final TunerService tunerService = Dependency.get(TunerService.class);
+        tunerService.addTunable(this, LOCKSCREEN_CUSTOM_CLOCK_FACE);
         onDensityOrFontScaleChanged();
     }
 
@@ -232,6 +238,7 @@ public class KeyguardStatusView extends GridLayout implements
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
         layoutOwnerInfo();
+        layoutWeatherView();
     }
 
     @Override
@@ -297,35 +304,40 @@ public class KeyguardStatusView extends GridLayout implements
                 com.android.internal.R.string.global_action_logout));
     }
 
+    private String getCurrentClockFace() {
+        if (DEBUG) Log.v(TAG, "getCurrentClockFace: " + SeamlessClockSwitch.getCurrentClockFace(mContext));
+        return SeamlessClockSwitch.getCurrentClockFace(mContext);
+    }
+
+    private boolean isClockLeftAligned() {
+        String currentClock = getCurrentClockFace();
+        return currentClock == null
+                ? false
+                : currentClock.contains("ShapeShiftClockController");
+    }
+
+    private boolean isWeatherProvidedByClockPlugin() {
+        String currentClock = getCurrentClockFace();
+        return currentClock == null
+                ? false
+                : currentClock.contains("DividedLinesClockController");
+    }
+
+    private int getLeftPadding() {
+        int leftPadding = 0;
+        String currentClock = getCurrentClockFace();
+        if (currentClock == null) return leftPadding;
+        if (currentClock.contains("ShapeShiftClockController")) {
+              leftPadding = ((int) mContext.getResources()
+                .getDimension(R.dimen.ssos_clock_padding_start));
+        }
+        return leftPadding;
+    }
+
     private void updateOwnerInfo() {
         if (mOwnerInfo == null) return;
         String info = mLockPatternUtils.getDeviceOwnerInfo();
         if (info == null) {
-            String currentClock = mClockView.getClockPluginName();
-            boolean isClockLeftAligned = currentClock == null
-                    ? false
-                    : "ssos".equals(currentClock);
-            // If left aligned style clock, align the textView to start else keep it center.
-            int leftPadding = 0;
-            if (isClockLeftAligned) {
-                if ("ide".equals(currentClock)) {
-                    leftPadding = (int) mContext.getResources()
-                        .getDimension(R.dimen.ide_clock_margin_start);
-                } else if("type".equals(currentClock)) {
-                    leftPadding = ((int) mContext.getResources()
-                        .getDimension(R.dimen.custom_clock_left_padding)) + 8;
-                } else {
-                    //ssos clockFace
-                    leftPadding = ((int) mContext.getResources()
-                        .getDimension(R.dimen.ssos_clock_padding_start));
-                }
-                mOwnerInfo.setPaddingRelative(leftPadding, 0, 0, 0);
-                mOwnerInfo.setGravity(Gravity.START);
-            } else {
-                mOwnerInfo.setPaddingRelative(0, 0, 0, 0);
-                mOwnerInfo.setGravity(Gravity.CENTER);
-            }
-
             // Use the current user owner information if enabled.
             final boolean ownerInfoEnabled = mLockPatternUtils.isOwnerInfoEnabled(
                     KeyguardUpdateMonitor.getCurrentUser());
@@ -449,6 +461,14 @@ public class KeyguardStatusView extends GridLayout implements
             int expanded = mOwnerInfo.getBottom() + mOwnerInfo.getPaddingBottom();
             int toRemove = (int) ((expanded - collapsed) * ratio);
             setBottom(getMeasuredHeight() - toRemove);
+            // If left aligned style clock, align the textView to start else keep it center.
+            if (isClockLeftAligned()) {
+                mOwnerInfo.setPaddingRelative(getLeftPadding(), 0, 0, 0);
+                mOwnerInfo.setGravity(Gravity.START);
+            } else {
+                mOwnerInfo.setPaddingRelative(0, 0, 0, 0);
+                mOwnerInfo.setGravity(Gravity.CENTER);
+            }
             if (mNotificationIcons != null) {
                 // We're using scrolling in order not to overload the translation which is used
                 // when appearing the icons

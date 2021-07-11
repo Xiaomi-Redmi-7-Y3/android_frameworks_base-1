@@ -396,10 +396,6 @@ public class KeyguardClockSwitch extends RelativeLayout {
         return mClockView.getTextSize();
     }
 
-    public String getClockPluginName() {
-        return  (mClockPlugin != null) ? mClockPlugin.getName() : null;
-    }
-
     /**
      * Returns the preferred Y position of the clock.
      *
