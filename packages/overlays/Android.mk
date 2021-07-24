@@ -66,6 +66,8 @@ LOCAL_REQUIRED_MODULES := \
 	IconPackRoundedSettingsOverlay \
 	IconPackRoundedSystemUIOverlay \
 	IconPackRoundedThemePickerOverlay \
+	IconPackOOSAndroidOverlay \
+	IconPackOOSSystemUIOverlay \
 	IconShapePebbleOverlay \
 	IconShapeRoundedRectOverlay \
 	IconShapeSquircleOverlay \
