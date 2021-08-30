@@ -314,6 +314,7 @@ public class KeyguardStatusView extends GridLayout implements
         return currentClock == null
                 ? false
                 : currentClock.contains("ShapeShiftClockController");
+                || currentClock.contains("AndroidSDP3ClockController");
     }
 
     private boolean isWeatherProvidedByClockPlugin() {
@@ -327,8 +328,12 @@ public class KeyguardStatusView extends GridLayout implements
         int leftPadding = 0;
         String currentClock = getCurrentClockFace();
         if (currentClock == null) return leftPadding;
-        if (currentClock.contains("ShapeShiftClockController")) {
-              leftPadding = ((int) mContext.getResources()
+		if(currentClock.contains("AndroidSDP3ClockController")) {
+            leftPadding = ((int) mContext.getResources()
+                .getDimension(R.dimen.sdp3_clock_padding_start));
+        } else {
+            //ssos clockFace
+            leftPadding = ((int) mContext.getResources()
                 .getDimension(R.dimen.ssos_clock_padding_start));
         }
         return leftPadding;

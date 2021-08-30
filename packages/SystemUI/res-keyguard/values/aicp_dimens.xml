@@ -2,4 +2,5 @@
 <resources>
     <dimen name="custom_clock_left_padding">50dp</dimen>
     <dimen name="ssos_clock_padding_start">24dp</dimen>
+    <dimen name="sdp3_clock_padding_start">16dp</dimen>
 </resources>

@@ -28,7 +28,8 @@ public class SeamlessClockSwitch {
         "com.android.keyguard.clock.OPMinimalClockController",
         "com.android.keyguard.clock.OPNumbersClockController",
         "com.android.keyguard.clock.OPRomanClockController",
-        "com.android.keyguard.clock.ShapeShiftClockController"
+        "com.android.keyguard.clock.ShapeShiftClockController",
+        "com.android.keyguard.clock.AndroidSDP3ClockController"
 };
 
     public static int getCurrentPosition(String currentClockFace) {
