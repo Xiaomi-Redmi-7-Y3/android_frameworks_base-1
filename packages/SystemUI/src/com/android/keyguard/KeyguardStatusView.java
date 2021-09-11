@@ -321,7 +321,8 @@ public class KeyguardStatusView extends GridLayout implements
         String currentClock = getCurrentClockFace();
         return currentClock == null
                 ? false
-                : currentClock.contains("DividedLinesClockController");
+                : (currentClock.contains("DividedLinesClockController")
+                  || currentClock.contains("AndroidSClockController"));
     }
 
     private int getLeftPadding() {
