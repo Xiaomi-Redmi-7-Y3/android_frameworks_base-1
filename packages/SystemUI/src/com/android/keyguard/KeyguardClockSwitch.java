@@ -19,6 +19,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.util.MathUtils;
 import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -31,6 +32,7 @@ import androidx.annotation.VisibleForTesting;
 import com.android.internal.colorextraction.ColorExtractor;
 import com.android.internal.colorextraction.ColorExtractor.OnColorsChangedListener;
 import com.android.keyguard.clock.ClockManager;
+import com.android.systemui.Dependency;
 import com.android.systemui.Interpolators;
 import com.android.systemui.OnSwipeTouchListener;
 import com.android.systemui.R;
@@ -124,7 +126,7 @@ public class KeyguardClockSwitch extends RelativeLayout {
      * Status area (date and other stuff) shown below the clock. Plugin can decide whether or not to
      * show it below the alternate clock.
      */
-    private View mKeyguardStatusArea;
+    private KeyguardSliceView mKeyguardStatusArea;
 
     /**
      * Maintain state so that a newly connected plugin can be initialized.

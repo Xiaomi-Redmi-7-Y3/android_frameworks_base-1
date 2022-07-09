@@ -71,9 +71,6 @@ public class KeyguardStatusView extends GridLayout implements
     private float mDarkAmount = 0;
     private int mTextColor;
 
-    private static final String LOCKSCREEN_CUSTOM_CLOCK_FACE =
-            "secure:" + Settings.Secure.LOCK_SCREEN_CUSTOM_CLOCK_FACE;
-
     /**
      * Bottom margin that defines the margin between bottom of smart space and top of notification
      * icons on AOD.
@@ -140,8 +137,6 @@ public class KeyguardStatusView extends GridLayout implements
         mIActivityManager = ActivityManager.getService();
         mLockPatternUtils = new LockPatternUtils(getContext());
         mHandler = new Handler();
-        final TunerService tunerService = Dependency.get(TunerService.class);
-        tunerService.addTunable(this, LOCKSCREEN_CUSTOM_CLOCK_FACE);
         onDensityOrFontScaleChanged();
     }
 
@@ -238,7 +233,6 @@ public class KeyguardStatusView extends GridLayout implements
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
         layoutOwnerInfo();
-        layoutWeatherView();
     }
 
     @Override
@@ -313,7 +307,7 @@ public class KeyguardStatusView extends GridLayout implements
         String currentClock = getCurrentClockFace();
         return currentClock == null
                 ? false
-                : currentClock.contains("ShapeShiftClockController");
+                : currentClock.contains("ShapeShiftClockController")
                 || currentClock.contains("AndroidSDP3ClockController");
     }
 
@@ -321,15 +315,14 @@ public class KeyguardStatusView extends GridLayout implements
         String currentClock = getCurrentClockFace();
         return currentClock == null
                 ? false
-                : (currentClock.contains("DividedLinesClockController")
-                  || currentClock.contains("AndroidSClockController"));
+                : currentClock.contains("AndroidSClockController");
     }
 
     private int getLeftPadding() {
         int leftPadding = 0;
         String currentClock = getCurrentClockFace();
         if (currentClock == null) return leftPadding;
-		if(currentClock.contains("AndroidSDP3ClockController")) {
+		if (currentClock.contains("AndroidSDP3ClockController")) {
             leftPadding = ((int) mContext.getResources()
                 .getDimension(R.dimen.sdp3_clock_padding_start));
         } else {
