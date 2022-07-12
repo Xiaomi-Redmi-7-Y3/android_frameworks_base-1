@@ -118,7 +118,7 @@ public class ShapeShiftClockController implements ClockPlugin {
 
     @Override
     public String getTitle() {
-        return "ShapeShift";
+        return "OxygenOS";
     }
 
     @Override
