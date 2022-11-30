@@ -7438,5 +7438,8 @@ message MetricsEvent {
     
     // ExodusOS Settings
     EXODUS_SETTINGS = 4000;
+
+    // NetworkTraffic constant
+    NETWORK_TRAFFIC = 4001;
   }
 }
