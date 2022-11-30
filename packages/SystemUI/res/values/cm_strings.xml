@@ -108,6 +108,9 @@
     <!-- USB tethering QS tile -->
     <string name="quick_settings_usb_tether_label">USB tethering</string>
 
+     <!-- Network traffic -->
+    <dimen name="network_traffic_width">25sp</dimen>
+
     <!-- VPN QS tile -->
     <string name="quick_settings_vpn_label">VPN</string>
     <string name="quick_settings_vpn_connect_dialog_title">Connect to\u2026</string>
