@@ -79,6 +79,8 @@ public class SystemSettings {
         Settings.System.SHOW_BATTERY_PERCENT,
         Settings.System.NOTIFICATION_VIBRATION_INTENSITY,
         Settings.System.RING_VIBRATION_INTENSITY,
+        Settings.System.NETWORK_TRAFFIC_STATE,
+        Settings.System.NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD,
         Settings.System.HAPTIC_FEEDBACK_INTENSITY,
         Settings.System.DISPLAY_COLOR_MODE_VENDOR_HINT, // must precede DISPLAY_COLOR_MODE
         Settings.System.DISPLAY_COLOR_MODE,
