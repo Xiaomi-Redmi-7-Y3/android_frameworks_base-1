@@ -7441,5 +7441,9 @@ message MetricsEvent {
 
     // NetworkTraffic constant
     NETWORK_TRAFFIC = 4001;
+
+    // Exodus Settings constant
+    EXODUS = 4002;
+
   }
 }
