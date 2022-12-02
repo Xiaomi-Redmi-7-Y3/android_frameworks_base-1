@@ -28,6 +28,10 @@
     <!-- Whether or not we show the number in the bar. -->
     <bool name="config_statusBarShowNumber">false</bool>
 
+    <!-- StatusBar burn-in protection -->
+    <bool name="config_statusBarBurnInProtection">true</bool>
+    <integer name="config_shift_interval">60</integer>
+
     <!-- For how long the lock screen can be on before the display turns off. -->
     <integer name="config_lockScreenDisplayTimeout">10000</integer>
 
