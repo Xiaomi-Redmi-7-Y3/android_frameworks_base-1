@@ -7445,5 +7445,8 @@ message MetricsEvent {
     // Exodus Settings constant
     EXODUS = 4002;
 
+    // Exodus Customisation constant
+    EXODUS_CUSTOMISATION = 4003;
+
   }
 }
