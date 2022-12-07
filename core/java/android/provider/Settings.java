@@ -5267,6 +5267,11 @@ public final class Settings {
         public static final String ROAMING_INDICATOR_ICON = "roaming_indicator_icon";
 
         /**
+         * @hide
+         */
+        public static final String USE_OLD_MOBILETYPE = "use_old_mobiletype"; 
+
+        /**
          * Three Finger Gesture from Oppo
          * @hide
          */
