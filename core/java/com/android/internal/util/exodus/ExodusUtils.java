@@ -46,7 +46,7 @@ public class ExodusUtils {
                 }
             }
         } catch (CameraAccessException e) {
-             Ignore
+            // Ignore
         }
         return false;
     }
