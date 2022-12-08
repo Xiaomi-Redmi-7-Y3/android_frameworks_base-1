@@ -122,7 +122,7 @@ public class TileAdapter extends RecyclerView.Adapter<Holder> implements TileSta
         mMinNumTiles = context.getResources().getInteger(R.integer.quick_settings_min_num_tiles);
         mNumColumns = context.getResources().getInteger(NUM_COLUMNS_ID);
         mAccessibilityDelegate = new TileAdapterDelegate();
-        mSizeLookup.setSpanIndexCacheEnabled(true);
+        mNumColumns = TileUtils.getQSColumnsCount(context, mNumColumns);
         mSizeLookup.setSpanIndexCacheEnabled(true);
     }
 
