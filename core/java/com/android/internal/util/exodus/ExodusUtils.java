@@ -34,7 +34,7 @@ public class ExodusUtils {
                 Context.CAMERA_SERVICE);
         try {
             String[] ids = cameraManager.getCameraIdList();
-            for (String id  ids) {
+            for (String id : ids) {
                 CameraCharacteristics c = cameraManager.getCameraCharacteristics(id);
                 Boolean flashAvailable = c.get(CameraCharacteristics.FLASH_INFO_AVAILABLE);
                 Integer lensFacing = c.get(CameraCharacteristics.LENS_FACING);
@@ -50,6 +50,7 @@ public class ExodusUtils {
         }
         return false;
     }
+
     public static boolean deviceHasFlashlight(Context ctx) {
         return ctx.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
     }
