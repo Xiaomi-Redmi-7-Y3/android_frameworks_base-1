@@ -31,6 +31,7 @@ import com.android.systemui.qs.customize.QSCustomizerController;
 import com.android.systemui.qs.dagger.QSScope;
 import com.android.systemui.qs.logging.QSLogger;
 import com.android.systemui.qs.TileUtils;
+import com.android.systemui.tuner.TunerService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +54,7 @@ public class QuickQSPanelController extends QSPanelControllerBase<QuickQSPanel>
             };
 
     private final FooterActionsController mFooterActionsController;
+    private final TunerService mTunerService;
 
     @Inject
     QuickQSPanelController(QuickQSPanel view, QSTileHost qsTileHost,
@@ -61,10 +63,12 @@ public class QuickQSPanelController extends QSPanelControllerBase<QuickQSPanel>
             @Named(QUICK_QS_PANEL) MediaHost mediaHost,
             MetricsLogger metricsLogger, UiEventLogger uiEventLogger, QSLogger qsLogger,
             DumpManager dumpManager,
-            @Named(QQS_FOOTER) FooterActionsController footerActionsController
+            @Named(QQS_FOOTER) FooterActionsController footerActionsController,
+            TunerService tunerService
     ) {
         super(view, qsTileHost, qsCustomizerController, usingMediaPlayer, mediaHost, metricsLogger,
                 uiEventLogger, qsLogger, dumpManager, tunerService);
+        mTunerService = tunerService;
         mFooterActionsController = footerActionsController;
     }
 
