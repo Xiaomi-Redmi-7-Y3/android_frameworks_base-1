@@ -5255,11 +5255,6 @@ public final class Settings {
          */
         public static final String QS_FOOTER_DATA_USAGE = "qs_footer_data_usage";
 
-         /**
-         * @hide
-         */
-        public static final String QS_TRANSPARENCY = "qs_transparency";
-
         /**
         * Whether flashlight_on_call ignores DND (Zen Mode)
         * @hide
