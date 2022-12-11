@@ -5250,11 +5250,6 @@ public final class Settings {
         public static final String ENABLE_RIPPLE_EFFECT = "enable_ripple_effect";
 
         /**
-         * @hide
-         */
-        public static final String QS_TILE_LABEL_SIZE = "qs_tile_label_size";
-
-        /**
          * Whether to show data usage in qs footer
          * @hide
          */
