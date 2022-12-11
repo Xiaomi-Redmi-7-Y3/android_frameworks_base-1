@@ -5355,8 +5355,6 @@ public final class Settings {
         public static final String QS_TRANSPARENCY = "qs_transparency";
 
         /**
-
-        /**
          * Whether to use the custom quick unlock screen control
          * @hide
          */
