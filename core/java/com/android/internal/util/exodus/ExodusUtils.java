@@ -16,7 +16,6 @@
 
 package com.android.internal.util.exodus;
 
-import android.Manifest;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.IActivityManager;
