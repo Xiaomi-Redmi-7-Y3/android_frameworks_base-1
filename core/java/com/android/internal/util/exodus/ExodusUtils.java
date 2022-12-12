@@ -16,10 +16,12 @@
 
 package com.android.internal.util.exodus;
 
+import android.Manifest;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.IActivityManager;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.hardware.camera2.CameraAccessException;
@@ -30,7 +32,10 @@ import android.os.AsyncTask;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 
+import com.android.internal.R;
 import com.android.internal.statusbar.IStatusBarService;
+
+import java.util.List;
 
 public class ExodusUtils {
 
